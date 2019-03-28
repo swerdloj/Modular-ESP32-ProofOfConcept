@@ -9,8 +9,8 @@
 
 #include "WiFi.h"
 
-const char* ssid = "SAS1";
-const char* password = "waldensians";
+const char* ssid = "ssid goes here";
+const char* password = "wifi password goes here";
 
 WiFiServer server(80);
 
@@ -79,10 +79,10 @@ void sv_loop() {
                             // break out of the while loop:
                             break;
                         } else {
-                            currentLine = ""; // Clear
+                            currentLine = ""; // Clear byte buffer
                         }
                     } else if (data != '\r') {
-                        currentLine += data; // Append
+                        currentLine += data; // Append byte
                     }
 
                     // Check request
