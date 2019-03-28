@@ -1,4 +1,4 @@
-# Modular-ESP32-PoC
+# Modular-ESP32-Proof of Concept
 
 #### Disclaimer: This code base is neither efficient nor optimized due to my limited knowledge of/experience with C++
 
