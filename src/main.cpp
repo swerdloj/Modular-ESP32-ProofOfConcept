@@ -19,6 +19,8 @@ void setup() {
     pinMode(BUTTON2, INPUT_PULLUP);
     pinMode(BUTTON_RETURN, INPUT_PULLUP);
 
+    pinMode(LED_BUILTIN, OUTPUT);
+
     tft().initR(INITR_BLACKTAB);
 
     Serial.begin(115200);

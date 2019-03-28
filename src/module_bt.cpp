@@ -20,7 +20,6 @@ void bt_setup() {
     ESP_BT.begin(DEVICE_NAME); // Set device name
     Serial.println("BT device ready for pairing");
 
-    pinMode(LED_BUILTIN, OUTPUT);
     tft().fillScreen(ST7735_BLACK);
     tft().println("BT Device Name: \n" + DEVICE_NAME);
 }
@@ -29,7 +28,6 @@ void bt_loop() {
     while(true) {
         if (digitalRead(BUTTON_RETURN) == LOW) {
             ESP_BT.end(); // Stop BT
-
             draw_setup();
             return;
         }
