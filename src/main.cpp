@@ -8,7 +8,7 @@ int current_selection = 0;
 const int NUM_OPTIONS = 3;
 String options[] = {"Flappy Pong", "Bluetooth", "Server"};
 
-int adjustment_last = 20; //TODO: Ensure this arbitrary number fixes initial cursor issues. It should since we default to item 1
+int adjustment_last = 20; //Arbitrary number for initial cursor draw
 
 void draw_menu(int);
 void dispatch(int);
@@ -79,33 +79,11 @@ void dispatch(int item) {
     if (item == 0) {
         run_flappy_pong();
     } else if (item == 1) {
-        run_bt();
+        run_bluetooth();
     } else if (item == 2) {
         run_server();
     } else {
         // error
     }
     did_return = true;
-}
-
-/* TODO:
-    module_loop()s are defined within while(true) blocks.
-    This means module_setup() can be called from module_loop() as the first line executed.
-
-    Consider doing this to simplify the interface.
-*/
-
-void run_flappy_pong() {
-    fp_setup();
-    fp_loop();
-}
-
-void run_bt() {
-    bt_setup();
-    bt_loop();
-}
-
-void run_server() {
-    sv_setup();
-    sv_loop();
 }

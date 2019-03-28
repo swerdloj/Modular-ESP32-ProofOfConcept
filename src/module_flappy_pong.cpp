@@ -44,15 +44,18 @@ void updatePaddle(int16_t);
 bool delta_time_passed();
 void reset_game();
 
-void fp_setup() {
-    Serial.println("Setup Flappy Pong");
-
+/* Nothing to do here
+void setup_flappy_pong() {
     tft().fillScreen(ST77XX_BLACK);
 }
+*/
 
-void fp_loop() {
-    Serial.println("Started Flappy Pong");
+void run_flappy_pong() {
+    Serial.println("Starting Flappy Pong");
 
+    tft().fillScreen(ST77XX_BLACK);
+
+    // Main loop
     while (true) {
         //while(!delta_time_passed())
         //delay(5);
@@ -61,7 +64,7 @@ void fp_loop() {
 
         updateButtonState();
 
-        if(digitalRead(BUTTON_RETURN) == LOW) { //TODO: BUTTON_RETURN
+        if(digitalRead(BUTTON_RETURN) == LOW) {
             draw_setup();
             Serial.println("Quitting Flappy Pong");
             return;
@@ -158,7 +161,7 @@ inline void updateBallOptimized(int16_t deltaX, int16_t deltaY) {
     tft().fillRect(ballX, ballY, ball_size, ball_size, ST7735_GREEN);
 }
 
-// TODO: Optimize like paddle. If ball_is_currently_colliding, update should be white rather than black (redraws the paddle)
+// Simple ball logic
 inline void updateBall(int16_t deltaX, int16_t deltaY) {
     tft().fillRect(ballX, ballY, ball_size, ball_size, ST7735_BLACK); // clear last ball location
 
@@ -188,7 +191,6 @@ inline void updateBall(int16_t deltaX, int16_t deltaY) {
 }
 
 // TODO: LERP (falling is already psuedo LERP thanks to 1-pixel drops)
-// TODO: Just draw black to the entire paddle column?
 // Update the paddle's position using rediculously optimized methods to compensate for slow tft() display update rate.
 inline void updatePaddle(int16_t deltaY) {
     if (deltaY > 0) { // Paddle moving down. We do not need to clip paddleY because deltaY will automatically adjust for this
@@ -214,7 +216,8 @@ inline void updatePaddle(int16_t deltaY) {
     }
 }
 
-void reset_game() { // TODO: The screen is not cleared properly after reset
+// FIXME: Getting hit while jumping (same frame?) causes graphical bug below
+void reset_game() {
     tft().fillScreen(ST7735_BLACK);
 
     ballX = 0;
@@ -228,6 +231,8 @@ void reset_game() { // TODO: The screen is not cleared properly after reset
 
     is_pressed = false;
 
+    updatePaddle(HEIGHT);
+    tft().fillRect(paddleX, 0, paddleWidth, HEIGHT, ST7735_BLACK);
     updatePaddle(-1);
 }
 

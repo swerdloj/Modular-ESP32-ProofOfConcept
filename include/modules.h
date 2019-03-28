@@ -1,17 +1,18 @@
 /*
 
-Include module headers and declare their respective run functions here.
+Include module headers here.
+Only use as a simple multi-include for main.cpp.
 
 */
 
 //Flappy Pong
 #include "module_flappy_pong.h"
-void run_flappy_pong();
+//void run_flappy_pong();
 
 //Bluetooth
-#include "module_bt.h"
-void run_bt();
+#include "module_bluetooth.h"
+//void run_bluetooth();
 
 //Server
 #include "module_server.h"
-void run_server();
+//void run_server();

@@ -12,13 +12,17 @@
 const char* ssid = "ssid goes here";
 const char* password = "wifi password goes here";
 
-WiFiServer server(80);
-
-void clear_status();
 
 String dr = "\n\n\n\n\n\n"; //display returns
 
-void sv_setup() {
+WiFiServer server(80);
+
+bool should_quit = false;
+
+void clear_status();
+bool check_should_quit();
+
+void setup_server() {
     tft().fillScreen(ST7735_BLACK);
     tft().println("Connecting to: \n" + (String) ssid);
 
@@ -26,6 +30,10 @@ void sv_setup() {
 
     String dots = "";
     while (WiFi.status() != WL_CONNECTED) {
+        if (check_should_quit()) {
+            return;
+        }
+
         delay(400);
         dots += ".";
         if (dots.equals("....")) {
@@ -47,9 +55,18 @@ void sv_setup() {
     server.begin();
 }
 
-//TODO: Read from socket and toggle LED or print a message or accept draw commands, etc.
-void sv_loop() {
+void run_server() {
+    Serial.println("Starting Server");
+    setup_server();
+
     while(true) {
+        if (check_should_quit()) {
+            Serial.println("Quitting Server");
+            server.stop();
+            draw_setup();
+            return;
+        }
+
         WiFiClient client = server.available(); // Listen for client
 
         if (client) { // If there is a client
@@ -101,16 +118,16 @@ void sv_loop() {
             // Client has been served
             client.stop(); 
         }
-
-        if (digitalRead(BUTTON_RETURN) == LOW) {
-            Serial.println("Quitting Server");
-            server.stop();
-            draw_setup();
-            return;
-        }
     }
 }
 
 void clear_status() {
     tft().fillRect(0, CHAR_HEIGHT*6, WIDTH, CHAR_HEIGHT*3, ST7735_BLACK);
+}
+
+bool check_should_quit() {
+        if (digitalRead(BUTTON_RETURN) == LOW) {
+            should_quit = true;
+        }
+        return should_quit;
 }

@@ -1,5 +1,5 @@
 #include "preamble.h"
-#include "module_bt.h"
+#include "module_bluetooth.h"
 #include "gtft.h"
 
 #include "BluetoothSerial.h"
@@ -16,7 +16,7 @@ int msg;
 void handle_msg(int);
 void draw_status(String);
 
-void bt_setup() {
+void setup_bluetooth() {
     ESP_BT.begin(DEVICE_NAME); // Set device name
     Serial.println("BT device ready for pairing");
 
@@ -24,9 +24,14 @@ void bt_setup() {
     tft().println("BT Device Name: \n" + DEVICE_NAME);
 }
 
-void bt_loop() {
+void run_bluetooth() {
+    Serial.println("Starting Bluetooth");
+
+    setup_bluetooth();
+
     while(true) {
         if (digitalRead(BUTTON_RETURN) == LOW) {
+            Serial.println("Quitting Bluetooth");
             ESP_BT.end(); // Stop BT
             draw_setup();
             return;

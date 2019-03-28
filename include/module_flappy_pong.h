@@ -1,2 +1,2 @@
-void fp_setup();
-void fp_loop();
+void setup_flappy_pong();
+void run_flappy_pong();

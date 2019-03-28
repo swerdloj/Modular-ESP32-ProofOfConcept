@@ -1,2 +1,2 @@
-void sv_setup();
-void sv_loop();
+void setup_server();
+void run_server();

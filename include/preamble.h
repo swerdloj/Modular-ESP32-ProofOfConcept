@@ -22,7 +22,7 @@ Contains core functionality shared across the project.
 #define TFT_MOSI 23
 #define TFT_SCLK 18
 
-#define LED_BUILTIN 2 // TODO: Confirm this
+#define LED_BUILTIN 2 // ESP32 Internal LED pin
 
 /* Button configurations */
 #define BUTTON1 12
