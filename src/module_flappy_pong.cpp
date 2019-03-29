@@ -2,10 +2,6 @@
 #include "module_flappy_pong.h"
 #include "gtft.h"
 
-// tft() display dimensions
-//const uint16_t HEIGHT = tft().height();
-//const uint16_t WIDTH = tft().width();
-
 // Ball Properties
 uint16_t ball_size = 5;
 int16_t ballX = 0;
@@ -23,11 +19,6 @@ int16_t paddleY = HEIGHT/2 - paddleHeight/2;
 uint16_t paddleX = WIDTH/2 - paddleWidth/2; // technically a constant (hence unsigned)
 uint16_t paddle_jump_height = 40;
 
-// Timing
-unsigned long time_prev = millis();
-unsigned long time_curr = millis();
-uint16_t millis_per_frame = 3400; // 30 fps = 33.33... ms/frame
-
 // Button press logic
 bool do_button_press = false;
 bool is_pressed = false;
@@ -38,10 +29,8 @@ int scale_rate = 10; //Speed up after this many points (interval)
 
 // Function forward declarations
 void updateButtonState();
-void updateBall(int16_t, int16_t);
 void updateBallOptimized(int16_t, int16_t);
 void updatePaddle(int16_t);
-bool delta_time_passed();
 void reset_game();
 
 /* Nothing to do here
@@ -161,35 +150,6 @@ inline void updateBallOptimized(int16_t deltaX, int16_t deltaY) {
     tft().fillRect(ballX, ballY, ball_size, ball_size, ST7735_GREEN);
 }
 
-// Simple ball logic
-inline void updateBall(int16_t deltaX, int16_t deltaY) {
-    tft().fillRect(ballX, ballY, ball_size, ball_size, ST7735_BLACK); // clear last ball location
-
-    // update ball coords
-    ballX += deltaX * ball_velocityX;
-    ballY += deltaY * ball_velocityY;
-
-    // check X bounds
-    if (ballX >= WIDTH) {
-        ballX = WIDTH;
-        ball_velocityX *= -1;
-    } else if (ballX <= 0) {
-        ballX = 0;
-        ball_velocityX *= -1;
-    }
-
-    // check Y bounds
-    if (ballY >= HEIGHT) {
-        ballY = HEIGHT;
-        ball_velocityY *= -1;
-    } else if (ballY <= 0) {
-        ballY = 0;
-        ball_velocityY *= -1;
-    }
-
-    tft().fillRect(ballX, ballY, ball_size, ball_size, ST7735_GREEN);
-}
-
 // TODO: LERP (falling is already psuedo LERP thanks to 1-pixel drops)
 // Update the paddle's position using rediculously optimized methods to compensate for slow tft() display update rate.
 inline void updatePaddle(int16_t deltaY) {
@@ -234,11 +194,4 @@ void reset_game() {
     updatePaddle(HEIGHT);
     tft().fillRect(paddleX, 0, paddleWidth, HEIGHT, ST7735_BLACK);
     updatePaddle(-1);
-}
-
-bool delta_time_passed() {
-    if (millis() - time_prev >= millis_per_frame) {
-        return true;
-    }
-    return false;
 }

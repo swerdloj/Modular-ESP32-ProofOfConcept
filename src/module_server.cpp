@@ -1,6 +1,12 @@
 /*
     The code in this file is based on the following example:
     https://github.com/espressif/arduino-esp32/blob/master/libraries/WiFi/examples/SimpleWiFiServer/SimpleWiFiServer.ino
+
+    With WPA2 Enterprise functionality based on:
+    https://github.com/JeroenBeemster/ESP32-WPA2-enterprise/blob/master/ESP32_WPA2enterprise.ino
+
+    Using the fix suggested by:
+    https://www.reddit.com/r/esp32/comments/727poi/esp32_wpa2_enterprise_problems/
 */
 
 #include "preamble.h"
@@ -9,8 +15,22 @@
 
 #include "WiFi.h"
 
-const char* ssid = "ssid goes here";
-const char* password = "wifi password goes here";
+/*  
+    WPA2 Enterprise flag
+    WARNING: Due to needing "esp_wpa2.h", using WPA2 enterprise will exceed the ESP32's program storage capacity. (At 98.5% without including it)
+*/
+//#define EAP
+
+#ifndef EAP
+    const char* ssid = "ssid goes here";
+    const char* password = "wifi password goes here";
+#else
+    #include "esp_wpa2.h"
+    const char* ssid = "WPA2 Enterprise SSID";
+    #define EAP_ID "donotchangethis@andrews.edu"  // Anonymous Identity (see https://sites.google.com/site/amitsciscozone/home/switching/peap---protected-eap-protocol)
+    #define EAP_USERNAME "username"               // Username 
+    #define EAP_PASSWORD "password"               // Password
+#endif
 
 
 String dr = "\n\n\n\n\n\n"; //display returns
@@ -26,7 +46,18 @@ void setup_server() {
     tft().fillScreen(ST7735_BLACK);
     tft().println("Connecting to: \n" + (String) ssid);
 
+#ifndef EAP
     WiFi.begin(ssid, password);
+#else
+    esp_wifi_sta_wpa2_ent_set_identity((uint8_t *)EAP_ID, strlen(EAP_ID));
+    esp_wifi_sta_wpa2_ent_set_username((uint8_t *)EAP_USERNAME, strlen(EAP_USERNAME));
+    esp_wifi_sta_wpa2_ent_set_password((uint8_t *)EAP_PASSWORD, strlen(EAP_PASSWORD));
+
+    esp_wpa2_config_t config = WPA2_CONFIG_INIT_DEFAULT();
+    esp_wifi_sta_wpa2_ent_enable(&config);
+
+    WiFi.begin(ssid);
+#endif
 
     String dots = "";
     while (WiFi.status() != WL_CONNECTED) {
@@ -63,6 +94,7 @@ void run_server() {
         if (check_should_quit()) {
             Serial.println("Quitting Server");
             server.stop();
+            WiFi.disconnect();
             draw_setup();
             return;
         }

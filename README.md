@@ -30,6 +30,7 @@ module_xyz.cpp: An application handled by the pOS.
 
 
 ## Notes:
+-Memory limitations mean this program is limited in functionality. This program currently uses 99% of available program memory.  
 -The structure of this application could be improved greatly, namely refactoring gtft to be truly global.  
 -This application's primary purpose is to serve as a proof-of-concept for the included features.  
 -The focus while developing this program is modularity--to put a lot of mini-programs onto the ESP32 and run them all.

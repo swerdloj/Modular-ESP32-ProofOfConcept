@@ -2,6 +2,7 @@
 #include "modules.h"
 #include "gtft.h"
 
+// Flag for whether a module was just exited (unused)
 bool did_return = false;
 
 int current_selection = 0;
