@@ -1,14 +1,3 @@
-/*
-    The code in this file is based on the following example:
-    https://github.com/espressif/arduino-esp32/blob/master/libraries/WiFi/examples/SimpleWiFiServer/SimpleWiFiServer.ino
-
-    With WPA2 Enterprise functionality based on:
-    https://github.com/JeroenBeemster/ESP32-WPA2-enterprise/blob/master/ESP32_WPA2enterprise.ino
-
-    Using the fix suggested by:
-    https://www.reddit.com/r/esp32/comments/727poi/esp32_wpa2_enterprise_problems/
-*/
-
 #include "preamble.h"
 #include "module_server.h"
 #include "gtft.h"
@@ -22,8 +11,8 @@
 //#define EAP
 
 #ifndef EAP
-    const char* ssid = "ssid goes here";
-    const char* password = "wifi password goes here";
+    const char* ssid = "GPHS";          // Your SSID goes here
+    const char* password = "1234abcd";  // SSID password goes here
 #else
     #include "esp_wpa2.h"
     const char* ssid = "WPA2 Enterprise SSID";
@@ -112,14 +101,15 @@ void run_server() {
                     if (data == '\n') {
                         if (currentLine.length() == 0) { // HTTP request has ended
                             // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
-                            // and a content-type so the client knows what's coming, then a blank line:
+                            // and a content-type so the client knows what to expect
+                            // finally, a blank line:
                             client.println("HTTP/1.1 200 OK");
                             client.println("Content-type:text/html");
                             client.println();
 
-                            // the content of the HTTP response follows the header:
-                            client.print("ESP32 WiFi Server");
-                            client.print("");
+                            // HTTP response content follows the header:
+                            client.println("ESP32 WiFi Server<br>");
+                            client.println("-----------------<br>");
                             client.print("LED <a href=\"/H\">on</a><br>");
                             client.print("LED <a href=\"/L\">off</a><br>");
 

@@ -39,7 +39,7 @@ void draw_setup() {
 
 // The "main menu"
 void loop() {
-    delay(200); // Allow holding down the button to cycle through menu
+    delay(100); // Allow holding down the button to cycle through menu
 
    if (digitalRead(BUTTON1) == LOW) { // Update selection
        if (++current_selection > NUM_OPTIONS-1) {
