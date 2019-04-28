@@ -11,8 +11,8 @@
 //#define EAP
 
 #ifndef EAP
-    const char* ssid = "GPHS";          // Your SSID goes here
-    const char* password = "1234abcd";  // SSID password goes here
+    const char* ssid = "your ssid";          // Your SSID goes here
+    const char* password = "your password";  // SSID password goes here
 #else
     #include "esp_wpa2.h"
     const char* ssid = "WPA2 Enterprise SSID";
