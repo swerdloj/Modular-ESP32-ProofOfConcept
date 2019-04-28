@@ -18,13 +18,14 @@ Bluetooth and Server can be easily expanded for greater functionality.
 ### The structure of this program is as follows:
 
 preamble.h: An include-once header to define core project dependencies/configurations across code base.  
-main.cpp: Serves as a psuedo-OS. Handles control flow and main menu.  
+main.cpp: Serves as a process dispatcher. Handles control flow and main menu.  
 gtft.h: A clunky workaround for Adafruit's TFT library (see gtft.h). I would improve this if I had a better understanding of C++.  
 modules.h: Simple multi-module include. 
 
-module_xyz.cpp: An application handled by the pOS.  
+module_xyz.cpp: An application handled by the dispatcher.  
 - Implementation includes a setup function and loop function as defined by the respective header.  
-- Modules are expected to handle BUTTON_RETURN events. Generally, this means returning from the module loop.  
+- If a setup function is used, it must be called from the run function before entering the module loop.  
+- Modules are expected to handle BUTTON_RETURN events. Generally, this means drawing the main menu and returning from the module loop.  
 
 
 
